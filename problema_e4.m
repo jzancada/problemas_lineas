@@ -1,64 +1,52 @@
 % datos
+clear
 
-R_p_20 = 0.1194; % ohm / km 
-r = 10.9; % mm
+R_p_20 = 0.3066; % ohm / km 
+r = 7.0; % mm
 H_m = 900; % m
-long_km = 140; % km
-D_ab = 6; % m
-D_bc = D_ab;
+long_km = 10; % km
+D_ab = 2.4; % m
+D_bc = sqrt(2.5^2 + 1.2^2 );
+D_ac = D_bc
+
 
 alpha = 0.004
-s = 40 % cm
-N = 2;
+N = 1;
 
 R_p_25 = R_p_20 * (1+alpha*(25-20))
-R_p_fase = R_p_25 / 2
-R_fase = R_p_fase * long_km
+R_fase = R_p_25 * long_km
 
-D_eq = (D_ab * 2*D_ab * D_bc)^(1/3)
-D_sq = (r/1000 * exp(-1/4) * s/100 )^(1/2)
+D_eq = (D_ab * D_bc * D_ac)^(1/3)
+D_sq = r/1000 * exp(-1/4) 
 L_p = 2e-7 * log(D_eq / D_sq)
 
 X_pl = 2*pi*50* L_p *1e3
 X_l = X_pl * long_km
 
-D_rmg = (r/1000 * s/100 )^(1/2)
-C_p = 2*pi*8.85E-12 / log(D_eq/D_rmg)
+% apartado 2
+S = 116.2
+k = 0.916
 
-B_p = 2*pi*50*C_p
-B = B_p * long_km * 1e3 * 1e3
+s_tabla     = [95 125]
+delta_tabla = [ 3  2.7]
+delta = interp1(s_tabla, delta_tabla, S)
 
-% 
-I_carga = 100E6 / (sqrt(3)*220*1e3)
-Pjoule = 3*R_fase*I_carga^2
+I_max = delta * k * S
 
 % apartado 3
-md = 0.85
-mt = 1
-h = 76*10^(-0.9/18.4)
-theta = 25-5*0.9
-delta = 3.921 * h / (273 + theta)
-epsilon_ra = 21.1
-r_cm = r / 10
-DMG_cm = D_eq * 100
-R_H = s / (2*sin(pi/N))
-beta = (1+(N-1)*r_cm/R_H)/N
+theta_ext = 10
+v_viento = 0.6
+epsilon = 0.5
+sigma = 5.6696E-8
+theta_max = 70
+Q_r = epsilon * sigma * pi * (2*r/1000) * ((theta_max+273.16)^4 - (theta_ext+273.16)^4)
+Q_c1 = (1.01 + 11.27*(2*r*v_viento)^0.52)*0.02723*(theta_max - theta_ext)
+Q_c2 = 0.2371*(2*r*v_viento)^0.6*(theta_max - theta_ext)
+Q_c = Q_c1
 
-U_d_seco = sqrt(3) * md * mt * delta * epsilon_ra * r_cm / beta * log(DMG_cm/r_cm)
-U_d_humedo = 0.8 * U_d_seco
+Q_s = 0.5 * 250 * 0.014
 
-% apartado 4
+Rp70 = R_p_20 * (1 + alpha*(50))
 
-N = 1
-R_H = s / (2*sin(pi/N))
-beta = (1+(N-1)*r_cm/R_H)/N
+I_max = sqrt((Q_r + Q_c - Q_s) / (Rp70*1e-3))
 
-U_d_seco = sqrt(3) * md * mt * delta * epsilon_ra * r_cm / beta * log(DMG_cm/r_cm)
-U_d_humedo = 0.8 * U_d_seco
-
-% perdidas efecto corona
-P = 241 / delta *(50+25) * sqrt(r_cm / DMG_cm) * (245/sqrt(3) - U_d_seco / sqrt(3))^2 * 1e-5
-P_seco = P  * long_km
-
-P_humedo = 241 / delta *(50+25) * sqrt(r_cm / DMG_cm) * (245/sqrt(3) - U_d_humedo / sqrt(3))^2 * 1e-5
-P_humedo = P_humedo  * long_km
