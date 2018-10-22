@@ -4,6 +4,7 @@ densidad_x = [2.3 2.15];
 
 seccion = 281.1 ;
 densidad = interp1(seccion_x, densidad_x, seccion);
+fprintf('densidad= %.3f\n', densidad);
 
 K = 0.937;
 
