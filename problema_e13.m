@@ -5,6 +5,8 @@
 % Z - impedancia serie
 % Y - admitancia paralelo
 %
+clear
+
 L = 16; % [km]
 P_carga = 1000E3; % [W]
 cos_phi = 0.8; % inductivo

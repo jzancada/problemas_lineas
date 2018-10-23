@@ -28,7 +28,7 @@ S = 116.2
 k = 0.916
 
 s_tabla     = [95 125]
-delta_tabla = [ 3  2.7]
+delta_tabla = [ 3.2  2.9]
 delta = interp1(s_tabla, delta_tabla, S)
 
 I_max = delta * k * S
