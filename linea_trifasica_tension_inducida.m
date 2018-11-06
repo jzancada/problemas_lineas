@@ -39,6 +39,10 @@ u_a_I = j*2*pi*50*lambda_a * 10E3
 u_b_I = j*2*pi*50*lambda_b * 10E3
 u_c_I = j*2*pi*50*lambda_c * 10E3
 
+fprintf("u_a_I = %.2f |_ %.2f[deg]\n", abs(u_a_I), angle(u_a_I)/pi*180);
+fprintf("u_b_I = %.2f |_ %.2f[deg]\n", abs(u_b_I), angle(u_b_I)/pi*180);
+fprintf("u_c_I = %.2f |_ %.2f[deg]\n", abs(u_c_I), angle(u_c_I)/pi*180);
+
 % tramo II (10 km a - b - c)
 % a o   o c
 % b o   o a
